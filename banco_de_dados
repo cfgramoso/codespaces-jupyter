@@ -1,0 +1,28 @@
+import cgi
+import pandas as pd
+
+# Função para ler os dados do formulário HTML
+def read_form_data():
+    form = cgi.FieldStorage()
+    data = {}
+    for field in form.keys():
+        data[field] = form[field].value
+    return data
+
+# Função para atualizar o arquivo CSV com os novos dados
+def update_csv(data):
+    # Ler o arquivo CSV existente
+    df = pd.read_csv('cadastro_alunos.csv')
+
+    # Adicionar novos dados ao DataFrame
+    df = df.append(data, ignore_index=True)
+
+    # Salvar o DataFrame de volta como CSV
+    df.to_csv('cadastro_alunos.csv', index=False)
+
+# Processar os dados do formulário HTML e atualizar o arquivo CSV
+if __name__ == "__main__":
+    data = read_form_data()
+    update_csv(data)
+    print("Content-Type: text/html\n\n")
+    print("<html><head><title>Success</title></head><body><h1>Dados adicionados com sucesso!</h1></body></html>")
